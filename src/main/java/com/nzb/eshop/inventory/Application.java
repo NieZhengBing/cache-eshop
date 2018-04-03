@@ -10,12 +10,15 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.embedded.ServletListenerRegistrationBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
+
+import com.nzb.eshop.inventory.listener.InitListener;
 
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
@@ -80,5 +83,18 @@ public class Application {
 		jedisClusterNodes.add(new HostAndPort("172.20.10.12", 7005));
 		JedisCluster jedisCluster = new JedisCluster(jedisClusterNodes);
 		return jedisCluster;
+	}
+
+	/**
+	 * @Description: 注册监听器
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Bean
+	public ServletListenerRegistrationBean servletListenerRegistrationBean() {
+		ServletListenerRegistrationBean servletListenerRegistrationBean = new ServletListenerRegistrationBean();
+		servletListenerRegistrationBean.setListener(new InitListener());
+		return servletListenerRegistrationBean;
+
 	}
 }
