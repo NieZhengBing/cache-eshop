@@ -25,4 +25,9 @@ public class RedisDaoImpl implements RedisDao {
 		return jedisCluster.get(key);
 	}
 
+	@Override
+	public void delete(String key) {
+		jedisCluster.del(key);
+	}
+
 }

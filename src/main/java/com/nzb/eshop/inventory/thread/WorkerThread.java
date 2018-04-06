@@ -23,8 +23,16 @@ public class WorkerThread implements Callable<Boolean> {
 
 	@Override
 	public Boolean call() throws Exception {
-		while (true) {
-			break;
+		try {
+			while (true) {
+				// ArrayBlockingQueue, Blocking说明，如果队列满了，或者是空的，那么在执行的时候，会阻塞
+				Request request = queue.take();
+				System.out.println("===========日志===========: 工作线程处理请求, 商品id=" + request.getProductId());
+				// 执行request
+				request.process();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return true;
 	}
